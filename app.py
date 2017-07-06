@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, abort
 import models
 from models import Entry
 import forms
@@ -19,14 +19,20 @@ def index():
 
 @app.route('/entries/<int:id>')
 def details(id):
-    entry = Entry.get(Entry.id == id)
+    try:
+        entry = Entry.get(Entry.id == id)
+    except models.DoesNotExist:
+        abort(404)
     return render_template('detail.html', entry=entry)
 
 
 @app.route('/entries/edit/<int:id>', methods=('GET', 'POST'))
 def edit_entry(id):
     form = forms.EntryForm()
-    entry = Entry.get(Entry.id == id)
+    try:
+        entry = Entry.get(Entry.id == id)
+    except models.DoesNotExist:
+        abort(404)
     if form.validate_on_submit():
         entry.title = form.title.data
         entry.date = form.date.data
@@ -40,7 +46,10 @@ def edit_entry(id):
 
 @app.route('/entries/delete/<id>')
 def delete_entry(id):
-    entry = Entry.get(Entry.id == id)
+    try:
+        entry = Entry.get(Entry.id == id)
+    except models.DoesNotExist:
+        abort(404)
     entry.delete_instance()
     return redirect(url_for('index'))
 
