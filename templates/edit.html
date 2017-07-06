@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Edit Entry | {{ super() }}{% endblock %}
+
+{% block content %}
+<section>
+    <div class="container">
+        <div class="edit-entry">
+            <h2>Edit Entry</h2>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                {% for error in form.title.errors %}
+                    {{ error }}
+                {% endfor %}
+                <label for="title"> Title</label>
+                <input id="title" type="text" name="title" value="{{ entry.title }}"><br>
+                {% for error in form.date.errors %}
+                    {{ error }}
+                {% endfor %}
+                <label for="date">Date</label>
+                <input id="date" type="date" name="date" value="{{ entry.date }}"><br>
+                {% for error in form.time_spent.errors %}
+                    {{ error }}
+                {% endfor %}
+                <label for="time-spent"> Time Spent</label>
+                <input id="time-spent" type="text" name="time_spent" value="{{ entry.time_spent }}"><br>
+                {% for error in form.learned.errors %}
+                    {{ error }}
+                {% endfor %}
+                <label for="what-i-learned">What I Learned</label>
+                <textarea id="what-i-learned" rows="5" name="learned">{{ entry.learned }}</textarea>
+                {% for error in form.resources.errors %}
+                    {{ error }}
+                {% endfor %}
+                <label for="resources-to-remember">Resources to Remember</label>
+                <textarea id="resources-to-remember" rows="5" name="resources">{{ entry.resources }}</textarea>
+                <input type="submit" value="Publish Entry" class="button">
+                <a href="{{ url_for('details', id=entry.id) }}" class="button button-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
